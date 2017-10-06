@@ -110,6 +110,7 @@ const getStyles = (props) => {
       "height": "100vh",
       "backgroundColor": "white",
       "borderRight": "1px solid #ccc",
+      // "transform": "translateX(-100px)",
       "@media only screen and (max-width: 949px)": {
         position: "absolute",
         top: 0,
@@ -149,7 +150,6 @@ class ActionView extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       isMobile: this.isMobile,
       enterAnimation: {
@@ -159,6 +159,16 @@ class ActionView extends Component {
       },
       leaveAnimation: {
         animation: { translateX: 400 },
+        duration: 200,
+        easing: "easeInOutQuad"
+      },
+      rtlEnterAnimation: {
+        animation: { translateX: 0 },
+        duration: 200,
+        easing: "easeInOutQuad"
+      },
+      rtlLeaveAnimation: {
+        animation: { translateX: -400 },
         duration: 200,
         easing: "easeInOutQuad"
       },
@@ -465,12 +475,15 @@ class ActionView extends Component {
   }
 
   render() {
+    // identify when the switch to rtl is made
+    const isRtl = document.querySelector("html").className === "rtl";
     return (
       <div>
         <VelocityTransitionGroup
-          enter={this.state.enterAnimation}
-          leave={this.state.leaveAnimation}
+          enter={isRtl ? this.state.rtlEnterAnimation : this.state.enterAnimation}
+          leave={isRtl ? this.state.rtlLeaveAnimation : this.state.leaveAnimation}
         >
+
           {this.renderActionView()}
         </VelocityTransitionGroup>
 
